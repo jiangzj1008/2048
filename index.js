@@ -34,7 +34,7 @@ var randomNum = function() {
     span.innerHTML = num
 }
 
-randomNum()
+
 // 滑动时
 // 1、所有滑快向同一方向滑动
 // 2、遇到数字相同的滑块，合并升级
