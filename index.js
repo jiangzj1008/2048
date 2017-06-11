@@ -17,7 +17,13 @@ var initScreen = function() {
     }
 }
 
-initScreen()
+// arr = {
+//     [0,0,0,0],
+//     [0,0,0,0],
+//     [0,0,0,0],
+//     [0,0,0,0]
+// }
+
 
 // 打开时随机位置，生成一个2或4
 var randomNum = function() {
@@ -30,12 +36,18 @@ var randomNum = function() {
     // 随机位置
     var ran = Math.floor(Math.random() * (15 - 0 + 1) + 0)
     // 插入
-    var span = es('span')[ran]
+    var span = es('.cell')[ran]
     span.innerHTML = num
 }
 
-
 // 滑动时
 // 1、所有滑快向同一方向滑动
+var slideToLeft = function() {
+
+}
 // 2、遇到数字相同的滑块，合并升级
 // 3、滑动结束，在剩余的空间里，随机生成一个2/4
+
+
+initScreen()
+randomNum()
