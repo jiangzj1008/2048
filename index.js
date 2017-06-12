@@ -17,37 +17,200 @@ var initScreen = function() {
     }
 }
 
-// arr = {
-//     [0,0,0,0],
-//     [0,0,0,0],
-//     [0,0,0,0],
-//     [0,0,0,0]
-// }
+var arr = [
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0]
+]
 
 
-// 打开时随机位置，生成一个2或4
+// 随机生成一个2或4
+var countZeroNum = function(arr) {
+    var count = 0
+    for (var i = 0; i < arr.length; i++) {
+        var a  = arr[i]
+        for (var i = 0; i < a.length; i++) {
+            if (a[i] == 0) {
+                count++
+            }
+        }
+    }
+    return count
+}
+
 var randomNum = function() {
     // 随机2/4
-    var x = Math.random()
+    var ran = Math.random()
     var num = 2
-    if (x >= 0.8) {
+    if (ran >= 0.8) {
         num = 4
     }
-    // 随机位置
-    var ran = Math.floor(Math.random() * (15 - 0 + 1) + 0)
+    // 获取0的个数
+    var count = countZeroNum(arr)
+    // 在0的个数内随机一个数字
+    var x = Math.floor(Math.random() * (3 - 0 + 1) + 0)
+    // 赋值
     // 插入
-    var span = es('.cell')[ran]
-    span.innerHTML = num
+    arr[y][x] = num
+    console.log(arr);
 }
 
 // 滑动时
-// 1、所有滑快向同一方向滑动
-var slideToLeft = function() {
+// 0、判断滑动方向
+var startX = 0
+var startY = 0
 
+var GetSlideAngle = function(dx, dy) {
+    return Math.atan2(dy, dx) * 180 / Math.PI
 }
-// 2、遇到数字相同的滑块，合并升级
+
+var GetSlideDirection = function(startX, startY, endX, endY) {
+    var dy = startY - endY
+    var dx = endX - startX
+    var result = ''
+    //如果滑动距离太短
+    if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+        return result
+    }
+    // 判断方向
+    var angle = GetSlideAngle(dx, dy)
+    if (angle >= -45 && angle < 45) {
+        result = 'right'
+    } else if (angle >= 45 && angle < 135) {
+        result = 'top'
+    } else if (angle >= -135 && angle < -45) {
+        result = 'bottom'
+    }
+    else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
+        result = 'left'
+    }
+    return result
+}
+
+
+// 1、所有滑快向同一方向滑动
+var clearZero = function(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == 0) {
+            arr.splice(i, 1)
+            i--
+        }
+    }
+    return arr
+}
+
+var mergeNum = function(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        var a1 = arr[i]
+        var a2 = arr[1 + i]
+        if (a1 == a2 && a1 != 0) {
+            arr[i] *= 2
+            arr[1 + i] = 0
+        }
+    }
+    return arr
+}
+
+var supplementZero = function(arr) {
+    while (arr.length < 4) {
+        arr.push(0)
+    }
+    return arr
+}
+
+var handleRow = function(arr, direction) {
+    if (direction == '') {
+        return arr
+    }
+    if (direction == 'right') {
+        arr.reverse()
+    }
+    // 清零
+    var a = clearZero(arr)
+    // 合并
+    var b = mergeNum(a)
+    // 清零
+    var c = clearZero(b)
+    // 补零
+    var d = supplementZero(c)
+    if (direction == 'right') {
+        d.reverse()
+    }
+    return d
+}
+
+var horizonSlide = function(direction) {
+    var newArr = []
+    for (var i = 0; i < arr.length; i++) {
+        var a = arr[i]
+        var row = handleRow(a, direction)
+        newArr.push(row)
+    }
+    arr = newArr
+}
+
+var rotateArrLeft = function(arr) {
+    var newArr = []
+    for (var j = 3; j >= 0; j--) {
+        var row = []
+        for (var i = 0; i < arr.length; i++) {
+            row.push(arr[i][j])
+        }
+        newArr.push(row)
+    }
+    return newArr
+}
+
+var rotateArrRight = function(arr) {
+    var newArr = []
+    for (var i = 0; i < arr.length; i++) {
+        var row = []
+        for (var j = 3; j >= 0; j--) {
+            row.push(arr[j][i])
+        }
+        newArr.push(row)
+    }
+    return newArr
+}
+
+var verticalSlide = function(direction) {
+    if (direction == 'top') {
+        var dir = 'left'
+    } else if (direction == 'bottom') {
+        var dir = 'right'
+    }
+    // 重新排列二维数组（想象将数组向左旋转90度）
+    arr = rotateArrLeft(arr)
+    // 进行水平滑动
+    horizonSlide(dir)
+    // 重新排列数组（将数组向右旋转90度）
+    arr = rotateArrRight(arr)
+}
+
+// 根据滑动方向进行滑动
+var direction = ''
+var bindSlide = function() {
+    document.addEventListener('touchstart', function (ev) {
+        startX = ev.touches[0].pageX
+        startY = ev.touches[0].pageY
+    }, false)
+    document.addEventListener('touchend', function (ev) {
+        var endX = ev.changedTouches[0].pageX
+        var endY =  ev.changedTouches[0].pageY
+        direction = GetSlideDirection(startX, startY, endX, endY)
+        if (direction == 'left' || direction == 'right') {
+            horizonSlide(direction)
+        } else if (direction == 'top' || direction == 'bottom') {
+            verticalSlide(direction)
+        }
+    }, false)
+}
+
+
 // 3、滑动结束，在剩余的空间里，随机生成一个2/4
 
 
 initScreen()
 randomNum()
+bindSlide()
