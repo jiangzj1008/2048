@@ -17,7 +17,7 @@ var initScreen = function() {
     }
 }
 
-var arr = [
+var _arr = [
     [0,0,0,0],
     [0,0,0,0],
     [0,0,0,0],
@@ -30,13 +30,29 @@ var countZeroNum = function(arr) {
     var count = 0
     for (var i = 0; i < arr.length; i++) {
         var a  = arr[i]
-        for (var i = 0; i < a.length; i++) {
-            if (a[i] == 0) {
+        for (var j = 0; j < a.length; j++) {
+            if (a[j] == 0) {
                 count++
             }
         }
     }
     return count
+}
+
+var randomChange = function(x, num) {
+    var n = 0
+    for (var i = 0; i < _arr.length; i++) {
+        var a = _arr[i]
+        for (var j = 0; j < a.length; j++) {
+            if (a[j] == 0) {
+                n++
+            }
+            if (n == x) {
+                a[j] = num
+                return
+            }
+        }
+    }
 }
 
 var randomNum = function() {
@@ -47,19 +63,18 @@ var randomNum = function() {
         num = 4
     }
     // 获取0的个数
-    var count = countZeroNum(arr)
+    var count = countZeroNum(_arr)
     // 在0的个数内随机一个数字
-    var x = Math.floor(Math.random() * (3 - 0 + 1) + 0)
-    // 赋值
-    // 插入
-    arr[y][x] = num
-    console.log(arr);
+    if (count > 0) {
+        var x = Math.floor(Math.random() * (count - 0))
+        randomChange(x, num)
+    }
 }
 
 // 滑动时
 // 0、判断滑动方向
-var startX = 0
-var startY = 0
+var _startX = 0
+var _startY = 0
 
 var GetSlideAngle = function(dx, dy) {
     return Math.atan2(dy, dx) * 180 / Math.PI
@@ -142,12 +157,12 @@ var handleRow = function(arr, direction) {
 
 var horizonSlide = function(direction) {
     var newArr = []
-    for (var i = 0; i < arr.length; i++) {
-        var a = arr[i]
+    for (var i = 0; i < _arr.length; i++) {
+        var a = _arr[i]
         var row = handleRow(a, direction)
         newArr.push(row)
     }
-    arr = newArr
+    _arr = newArr
 }
 
 var rotateArrLeft = function(arr) {
@@ -181,36 +196,52 @@ var verticalSlide = function(direction) {
         var dir = 'right'
     }
     // 重新排列二维数组（想象将数组向左旋转90度）
-    arr = rotateArrLeft(arr)
+    _arr = rotateArrLeft(_arr)
     // 进行水平滑动
     horizonSlide(dir)
     // 重新排列数组（将数组向右旋转90度）
-    arr = rotateArrRight(arr)
+    _arr = rotateArrRight(_arr)
+}
+
+var showArr = function() {
+    var cells = es('.cell')
+    var n = 0
+    for (var i = 0; i < _arr.length; i++) {
+        var a = _arr[i]
+        for (var j = 0; j < a.length; j++) {
+            if (a[j] != 0) {
+                cells[n].innerHTML = a[j]
+            } else {
+                cells[n].innerHTML = ''
+            }
+            n++
+        }
+    }
 }
 
 // 根据滑动方向进行滑动
 var direction = ''
 var bindSlide = function() {
     document.addEventListener('touchstart', function (ev) {
-        startX = ev.touches[0].pageX
-        startY = ev.touches[0].pageY
+        _startX = ev.touches[0].pageX
+        _startY = ev.touches[0].pageY
     }, false)
     document.addEventListener('touchend', function (ev) {
         var endX = ev.changedTouches[0].pageX
         var endY =  ev.changedTouches[0].pageY
-        direction = GetSlideDirection(startX, startY, endX, endY)
+        direction = GetSlideDirection(_startX, _startY, endX, endY)
         if (direction == 'left' || direction == 'right') {
             horizonSlide(direction)
         } else if (direction == 'top' || direction == 'bottom') {
             verticalSlide(direction)
         }
+        randomNum()
+        showArr()
     }, false)
 }
 
 
-// 3、滑动结束，在剩余的空间里，随机生成一个2/4
-
-
 initScreen()
 randomNum()
+showArr()
 bindSlide()
