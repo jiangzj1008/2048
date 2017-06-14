@@ -5,6 +5,7 @@
 }
 .wrap {
     position: relative;
+    top: 3rem;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -13,7 +14,6 @@
     background-color: rgb(187, 170, 170);
     border-radius: 0.1rem;
     margin: auto;
-    margin-top: 40%;
     padding: 0.05rem;
 }
 .row {
@@ -30,4 +30,50 @@
     margin: 0.05rem;
     border-radius: 0.1rem;
     background-color: rgb(221, 204, 187);
+}
+.board {
+    position: absolute;
+    top: 3rem;
+    left: 50%;
+    margin-left: -3.25rem;
+    width: 6.5rem;
+    height: 6.5rem;
+}
+.num {
+    position: absolute;
+    box-sizing: border-box;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.1rem;
+    color: rgb(119, 110, 101);
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 0.3rem;
+}
+.num-2 {
+    background-color: rgb(238, 228, 218);
+}
+.num-4 {
+    background-color: rgb(237, 224, 200);
+}
+.num-8 {
+    color: #fff;
+    background-color: rgb(242, 177, 121);
+}
+.num-16 {
+    color: #fff;
+    background-color: rgb(245, 149, 99);
+}
+.num-32 {
+    color: #fff;
+    background-color: rgb(246, 124, 95);
+}
+.num-64 {
+    color: #fff;
+    background-color: rgb(246, 94, 59);
+}
+.num-128 {
+    color: #fff;
+    background-color: rgb(237, 207, 114);
 }

@@ -203,16 +203,36 @@ var verticalSlide = function(direction) {
     _arr = rotateArrRight(_arr)
 }
 
+var generateNum = function(i, j, num) {
+    var top = 0.1 + 1.6 * i + 'rem'
+    var left = 0.1 + 1.6 * j + 'rem'
+    var style = `
+        top:${top};
+        left:${left};
+    `
+    var template = `
+        <div class="num num-${num}" style="${style}">${num}</div>
+    `
+    var board = e('.board')
+    board.innerHTML += template
+}
+
+var clearBoard = function() {
+    var board = e('.board')
+    board.innerHTML = ''
+}
+
 var showArr = function() {
     var cells = es('.cell')
     var n = 0
+    clearBoard()
     for (var i = 0; i < _arr.length; i++) {
         var a = _arr[i]
         for (var j = 0; j < a.length; j++) {
             if (a[j] != 0) {
-                cells[n].innerHTML = a[j]
+                generateNum(i, j, a[j])
             } else {
-                cells[n].innerHTML = ''
+                // cells[n].innerHTML = ''
             }
             n++
         }
