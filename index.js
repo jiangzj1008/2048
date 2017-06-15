@@ -252,10 +252,11 @@ var bindSlide = function() {
         direction = GetSlideDirection(_startX, _startY, endX, endY)
         if (direction == 'left' || direction == 'right') {
             horizonSlide(direction)
+            randomNum()
         } else if (direction == 'top' || direction == 'bottom') {
             verticalSlide(direction)
+            randomNum()
         }
-        randomNum()
         showArr()
     }, false)
 }

@@ -77,3 +77,23 @@
     color: #fff;
     background-color: rgb(237, 207, 114);
 }
+.num-256 {
+    color: #fff;
+    background-color: rgb(237, 204, 97);
+}
+.num-512 {
+    color: #fff;
+    background-color: rgb(237, 200, 80);
+}
+.num-1024 {
+    color: #fff;
+    background-color: rgb(237, 197, 63);
+    font-size: 0.6rem;
+    padding-top: 0.44rem;
+}
+.num-2048 {
+    color: #fff;
+    background-color: rgb(237, 194, 46);
+    font-size: 0.6rem;
+    padding-top: 0.44rem;
+}
