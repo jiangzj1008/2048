@@ -49,6 +49,7 @@ var randomChange = function(x, num) {
             }
             if (n == x) {
                 a[j] = num
+                console.log(i,j);
                 return
             }
         }
@@ -66,7 +67,7 @@ var randomNum = function() {
     var count = countZeroNum(_arr)
     // 在0的个数内随机一个数字
     if (count > 0) {
-        var x = Math.floor(Math.random() * (count - 0))
+        var x = Math.floor(Math.random() * (count - 0)) + 1
         randomChange(x, num)
     }
 }
