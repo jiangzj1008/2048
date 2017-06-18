@@ -24,6 +24,7 @@ var _arr = [
     [0,0,0,0]
 ]
 
+var _isWin
 
 // 随机生成一个2或4
 var countZeroNum = function(arr) {
@@ -123,6 +124,9 @@ var mergeNum = function(arr) {
         if (a1 == a2 && a1 != 0) {
             arr[i] *= 2
             arr[1 + i] = 0
+            if (arr[i] === 2048) {
+                _isWin = true
+            }
         }
     }
     return arr
@@ -240,6 +244,12 @@ var showArr = function() {
     }
 }
 
+var win = function() {
+    if (_isWin === true) {
+        alert('you win!')
+    }
+}
+
 // 根据滑动方向进行滑动
 var direction = ''
 var bindSlide = function() {
@@ -259,6 +269,7 @@ var bindSlide = function() {
             randomNum()
         }
         showArr()
+        win()
     }, false)
 }
 
