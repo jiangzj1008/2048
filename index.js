@@ -18,13 +18,13 @@ var initScreen = function() {
 }
 
 var _arr = [
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0]
+    [8,4,16,2],
+    [8,4,16,2],
+    [8,4,16,2],
+    [8,4,16,0]
 ]
 
-var _isWin
+var _result = ''
 
 // 随机生成一个2或4
 var countZeroNum = function(arr) {
@@ -50,7 +50,6 @@ var randomChange = function(x, num) {
             }
             if (n == x) {
                 a[j] = num
-                console.log(i,j);
                 return
             }
         }
@@ -70,6 +69,8 @@ var randomNum = function() {
     if (count > 0) {
         var x = Math.floor(Math.random() * (count - 0)) + 1
         randomChange(x, num)
+    } else if (count === 0) {
+        _result = 'lose'
     }
 }
 
@@ -106,7 +107,7 @@ var GetSlideDirection = function(startX, startY, endX, endY) {
 }
 
 
-// 1、所有滑快向同一方向滑动
+// 滑动事件
 var clearZero = function(arr) {
     for (var i = 0; i < arr.length; i++) {
         if (arr[i] == 0) {
@@ -125,7 +126,7 @@ var mergeNum = function(arr) {
             arr[i] *= 2
             arr[1 + i] = 0
             if (arr[i] === 2048) {
-                _isWin = true
+                _result = 'win'
             }
         }
     }
@@ -244,9 +245,11 @@ var showArr = function() {
     }
 }
 
-var win = function() {
-    if (_isWin === true) {
+var judge = function() {
+    if (_result === 'win') {
         alert('you win!')
+    } else if (_result === 'lose') {
+        alert('you lose!')
     }
 }
 
@@ -263,18 +266,35 @@ var bindSlide = function() {
         direction = GetSlideDirection(_startX, _startY, endX, endY)
         if (direction == 'left' || direction == 'right') {
             horizonSlide(direction)
-            randomNum()
         } else if (direction == 'top' || direction == 'bottom') {
             verticalSlide(direction)
-            randomNum()
         }
         showArr()
-        win()
+        judge()
+        randomNum()
     }, false)
 }
 
+// 重置事件
+var reset = function() {
+    _arr = [
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+    ]
+    _result = ''
+    randomNum()
+    showArr()
+}
+
+var bindReset = function() {
+    var btn = e('.reset')
+    btn.addEventListener('click', reset)
+}
 
 initScreen()
 randomNum()
 showArr()
 bindSlide()
+bindReset()
