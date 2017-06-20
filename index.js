@@ -18,7 +18,7 @@ var initScreen = function() {
 }
 
 var _arr = [
-    [8,4,16,2],
+    [1024,1024,16,2],
     [8,4,16,2],
     [8,4,16,2],
     [8,4,16,0]
@@ -243,9 +243,20 @@ var showArr = function() {
     }
 }
 
+var showTips = function(text) {
+    var tips = e('.tips')
+    tips.innerHTML = `you ${text}`
+    tips.style = 'display:block;'
+}
 
+// 判断胜负
 var judge = function() {
-    _result = 'lose'
+    if (_result === 'win') {
+        showTips(_result)
+        return
+    } else {
+        _result = 'lose'
+    }
     for (var i = 0; i < _arr.length; i++) {
         for (var j = 0; j < _arr.length; j++) {
             var a = _arr[i][j]
@@ -271,7 +282,9 @@ var judge = function() {
             }
         }
     }
-    console.log(_result);
+    if (_result === 'lose') {
+        showTips(_result)
+    }
 }
 
 // 根据滑动方向进行滑动
@@ -290,9 +303,9 @@ var bindSlide = function() {
         } else if (direction == 'top' || direction == 'bottom') {
             verticalSlide(direction)
         }
+        randomNum()
         showArr()
         judge()
-        randomNum()
     }, false)
 }
 

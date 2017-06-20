@@ -112,3 +112,6 @@
     font-size: 0.6rem;
     padding-top: 0.44rem;
 }
+.tips {
+    display: none;
+}
