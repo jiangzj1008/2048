@@ -69,8 +69,6 @@ var randomNum = function() {
     if (count > 0) {
         var x = Math.floor(Math.random() * (count - 0)) + 1
         randomChange(x, num)
-    } else if (count === 0) {
-        _result = 'lose'
     }
 }
 
@@ -245,12 +243,35 @@ var showArr = function() {
     }
 }
 
+
 var judge = function() {
-    if (_result === 'win') {
-        alert('you win!')
-    } else if (_result === 'lose') {
-        alert('you lose!')
+    _result = 'lose'
+    for (var i = 0; i < _arr.length; i++) {
+        for (var j = 0; j < _arr.length; j++) {
+            var a = _arr[i][j]
+            if (a===0) {
+                _result = ''
+                break
+            }
+            if (i>0 && a===_arr[i-1][j]) {
+                _result = ''
+                break
+            }
+            if (i<3 && a===_arr[i+1][j]) {
+                _result = ''
+                break
+            }
+            if (j>0 && a===_arr[i][j-1]) {
+                _result = ''
+                break
+            }
+            if (j<3 && a===_arr[i][j+1]) {
+                _result = ''
+                break
+            }
+        }
     }
+    console.log(_result);
 }
 
 // 根据滑动方向进行滑动
@@ -292,6 +313,8 @@ var bindReset = function() {
     var btn = e('.reset')
     btn.addEventListener('click', reset)
 }
+
+
 
 initScreen()
 randomNum()
