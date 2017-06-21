@@ -18,10 +18,10 @@ var initScreen = function() {
 }
 
 var _arr = [
-    [1024,1024,16,2],
-    [8,4,16,2],
-    [8,4,16,2],
-    [8,4,16,0]
+    [2,4,8,4],
+    [16,512,32,2],
+    [2,32,128,16],
+    [8,4,16,4]
 ]
 
 var _result = ''
@@ -124,7 +124,7 @@ var mergeNum = function(arr) {
             arr[i] *= 2
             arr[1 + i] = 0
             if (arr[i] === 2048) {
-                _result = 'win'
+                _result = 'WIN'
             }
         }
     }
@@ -243,47 +243,62 @@ var showArr = function() {
     }
 }
 
+// 提示框
 var showTips = function(text) {
     var tips = e('.tips')
-    tips.innerHTML = `you ${text}`
+    var box = e('.tips-box')
+    box.innerHTML = `YOU ${text}!`
     tips.style = 'display:block;'
+}
+var bindCloseTips = function() {
+    var tips = e('.tips')
+    tips.addEventListener('click', function(evt){
+        var target = evt.target
+        if (!target.classList.contains('tips-box')) {
+            tips.style = ''
+        }
+    })
 }
 
 // 判断胜负
-var judge = function() {
-    if (_result === 'win') {
-        showTips(_result)
-        return
-    } else {
-        _result = 'lose'
-    }
-    for (var i = 0; i < _arr.length; i++) {
-        for (var j = 0; j < _arr.length; j++) {
-            var a = _arr[i][j]
+var isSurvival = function(array) {
+    for (var i = 0; i < array.length; i++) {
+        for (var j = 0; j < array.length; j++) {
+            var a = array[i][j]
             if (a===0) {
                 _result = ''
                 break
             }
-            if (i>0 && a===_arr[i-1][j]) {
+            if (i>0 && a===array[i-1][j]) {
                 _result = ''
                 break
             }
-            if (i<3 && a===_arr[i+1][j]) {
+            if (i<3 && a===array[i+1][j]) {
                 _result = ''
                 break
             }
-            if (j>0 && a===_arr[i][j-1]) {
+            if (j>0 && a===array[i][j-1]) {
                 _result = ''
                 break
             }
-            if (j<3 && a===_arr[i][j+1]) {
+            if (j<3 && a===array[i][j+1]) {
                 _result = ''
                 break
             }
         }
     }
-    if (_result === 'lose') {
+}
+
+var judge = function() {
+    if (_result === 'WIN') {
         showTips(_result)
+        return
+    } else {
+        _result = 'LOSE'
+        isSurvival(_arr)
+        if (_result === 'LOSE') {
+            showTips(_result)
+        }
     }
 }
 
@@ -334,3 +349,4 @@ randomNum()
 showArr()
 bindSlide()
 bindReset()
+bindCloseTips()
