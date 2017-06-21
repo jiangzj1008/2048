@@ -97,8 +97,7 @@ var GetSlideDirection = function(startX, startY, endX, endY) {
         result = 'top'
     } else if (angle >= -135 && angle < -45) {
         result = 'bottom'
-    }
-    else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
+    } else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
         result = 'left'
     }
     return result
@@ -313,6 +312,9 @@ var bindSlide = function() {
         var endX = ev.changedTouches[0].pageX
         var endY =  ev.changedTouches[0].pageY
         direction = GetSlideDirection(_startX, _startY, endX, endY)
+        if (direction === '') {
+            return
+        }
         if (direction == 'left' || direction == 'right') {
             horizonSlide(direction)
         } else if (direction == 'top' || direction == 'bottom') {
@@ -341,7 +343,6 @@ var bindReset = function() {
     var btn = e('.reset')
     btn.addEventListener('click', reset)
 }
-
 
 
 initScreen()
