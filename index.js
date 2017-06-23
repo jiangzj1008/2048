@@ -106,13 +106,10 @@ var GetSlideDirection = function(startX, startY, endX, endY) {
 
 // 滑动事件
 var clearZero = function(arr) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i] == 0) {
-            arr.splice(i, 1)
-            i--
-        }
-    }
-    return arr
+    var result = arr.filter(function(item, index, array) {
+        return (item > 0)
+    })
+    return result
 }
 
 var mergeNum = function(arr) {
@@ -234,8 +231,6 @@ var showArr = function() {
         for (var j = 0; j < a.length; j++) {
             if (a[j] != 0) {
                 generateNum(i, j, a[j])
-            } else {
-                // cells[n].innerHTML = ''
             }
             n++
         }
