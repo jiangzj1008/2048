@@ -18,13 +18,21 @@ var initScreen = function() {
 }
 
 var _arr = [
-    [2,4,8,4],
-    [16,512,32,2],
-    [2,32,128,16],
-    [8,4,16,4]
+    [0,0,4,4],
+    [0,0,0,0],
+    [2,2,0,0],
+    [0,0,0,0]
 ]
 
 var _result = ''
+var _score = 0
+
+
+// 计分
+var showScore = function(score) {
+    var s = e('.scorePoint')
+    s.innerHTML = `${score}`
+}
 
 // 随机生成一个2或4
 var countZeroNum = function(arr) {
@@ -72,8 +80,7 @@ var randomNum = function() {
     }
 }
 
-// 滑动时
-// 0、判断滑动方向
+// 判断滑动方向
 var _startX = 0
 var _startY = 0
 
@@ -122,6 +129,7 @@ var mergeNum = function(arr) {
             if (arr[i] === 2048) {
                 _result = 'WIN'
             }
+            _score += arr[i]
         }
     }
     return arr
@@ -204,8 +212,8 @@ var verticalSlide = function(direction) {
 }
 
 var generateNum = function(i, j, num) {
-    var top = 0.1 + 1.6 * i + 'rem'
-    var left = 0.1 + 1.6 * j + 'rem'
+    var top = 0.1 * (1 + 16 * i) + 'rem'
+    var left = 0.1 * (1 + 16 * j) + 'rem'
     var style = `
         top:${top};
         left:${left};
@@ -223,15 +231,12 @@ var clearBoard = function() {
 }
 
 var showArr = function() {
-    var cells = es('.cell')
     var n = 0
     clearBoard()
     for (var i = 0; i < _arr.length; i++) {
         var a = _arr[i]
         for (var j = 0; j < a.length; j++) {
-            if (a[j] != 0) {
-                generateNum(i, j, a[j])
-            }
+            generateNum(i, j, a[j])
             n++
         }
     }
@@ -241,7 +246,11 @@ var showArr = function() {
 var showTips = function(text) {
     var tips = e('.tips')
     var box = e('.tips-box')
-    box.innerHTML = `YOU ${text}!`
+
+    box.innerHTML = `
+        <h3>YOU ${text}!</h3>
+        <p>SCORE:${_score}</p>
+    `
     tips.style = 'display:block;'
 }
 var bindCloseTips = function() {
@@ -310,13 +319,16 @@ var bindSlide = function() {
         if (direction === '') {
             return
         }
-        if (direction == 'left' || direction == 'right') {
+        if (direction === 'left' || direction === 'right') {
             horizonSlide(direction)
-        } else if (direction == 'top' || direction == 'bottom') {
+            moveLeft()
+        } else if (direction === 'top' || direction === 'bottom') {
             verticalSlide(direction)
         }
         randomNum()
-        showArr()
+        setTimeout(showArr,2000)
+        // showArr()
+        showScore(_score)
         judge()
     }, false)
 }
@@ -330,8 +342,10 @@ var reset = function() {
         [0,0,0,0]
     ]
     _result = ''
+    _score = 0
     randomNum()
     showArr()
+    showScore(_score)
 }
 
 var bindReset = function() {
