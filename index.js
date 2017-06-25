@@ -18,10 +18,10 @@ var initScreen = function() {
 }
 
 var _arr = [
-    [0,0,4,4],
-    [0,0,0,0],
-    [2,2,0,0],
-    [0,0,0,0]
+    [4,4,4,4],
+    [2,0,0,2],
+    [2,4,2,0],
+    [2,0,2,0]
 ]
 
 var _result = ''
@@ -305,8 +305,19 @@ var judge = function() {
     }
 }
 
+// 滑动间隔
+var updateStatus = function() {
+    var main = e('.main')
+    var sliding = main.dataset.sliding
+    if (sliding === 'false') {
+        main.dataset.sliding = 'true'
+    } else if (sliding === 'true') {
+        main.dataset.sliding = 'false'
+    }
+}
+
 // 根据滑动方向进行滑动
-var direction = ''
+var _direction = ''
 var bindSlide = function() {
     document.addEventListener('touchstart', function (ev) {
         _startX = ev.touches[0].pageX
@@ -315,21 +326,27 @@ var bindSlide = function() {
     document.addEventListener('touchend', function (ev) {
         var endX = ev.changedTouches[0].pageX
         var endY =  ev.changedTouches[0].pageY
-        direction = GetSlideDirection(_startX, _startY, endX, endY)
-        if (direction === '') {
+        var main = e('.main')
+        var sliding = main.dataset.sliding
+        _direction = GetSlideDirection(_startX, _startY, endX, endY)
+        if (_direction === '' || sliding === 'true') {
             return
+        } else {
+            if (_direction === 'left' || _direction === 'right') {
+                horizonSlide(_direction)
+            } else if (_direction === 'top' || _direction === 'bottom') {
+                verticalSlide(_direction)
+            }
+            move(_direction)
+            randomNum()
+            updateStatus()
+            setTimeout(function(){
+                showArr()
+                showScore(_score)
+                judge()
+                updateStatus()
+            },300)
         }
-        if (direction === 'left' || direction === 'right') {
-            horizonSlide(direction)
-            moveLeft()
-        } else if (direction === 'top' || direction === 'bottom') {
-            verticalSlide(direction)
-        }
-        randomNum()
-        setTimeout(showArr,2000)
-        // showArr()
-        showScore(_score)
-        judge()
     }, false)
 }
 
