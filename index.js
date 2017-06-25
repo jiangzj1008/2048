@@ -324,6 +324,7 @@ var bindSlide = function() {
         _startY = ev.touches[0].pageY
     }, false)
     document.addEventListener('touchend', function (ev) {
+        ev.preventDefault()
         var endX = ev.changedTouches[0].pageX
         var endY =  ev.changedTouches[0].pageY
         var main = e('.main')
