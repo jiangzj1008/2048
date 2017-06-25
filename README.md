@@ -1,3 +1,2 @@
 # 2048
-1. 实现基本的逻辑
-2. 动效有待实现
+https://jiangzj1008.github.io/2048/index.html
