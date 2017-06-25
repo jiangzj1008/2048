@@ -18,10 +18,10 @@ var initScreen = function() {
 }
 
 var _arr = [
-    [4,2,4,0],
-    [2,2,8,2],
-    [0,0,2,0],
-    [0,2,2,0]
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0]
 ]
 
 var _result = ''
@@ -324,7 +324,6 @@ var bindSlide = function() {
         _startY = ev.touches[0].pageY
     }, false)
     document.addEventListener('touchend', function (ev) {
-        ev.preventDefault()
         var endX = ev.changedTouches[0].pageX
         var endY =  ev.changedTouches[0].pageY
         var main = e('.main')
@@ -371,6 +370,13 @@ var bindReset = function() {
     btn.addEventListener('click', reset)
 }
 
+// 阻止浏览器滑动
+var prevent = function() {
+    var body = e('body')
+    body.addEventListener('touchmove', function(evt){
+        evt.preventDefault()
+    })
+}
 
 initScreen()
 randomNum()
@@ -378,3 +384,4 @@ showArr()
 bindSlide()
 bindReset()
 bindCloseTips()
+prevent()
