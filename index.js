@@ -81,35 +81,45 @@ var randomNum = function() {
 }
 
 // 判断滑动方向
-var _startX = 0
-var _startY = 0
+var SlideObj = function(){
+    var startX = 0
+    var startY = 0
+    var endX = 0
+    var endY = 0
+    var GetSlideAngle = function(dx, dy) {
+        return Math.atan2(dy, dx) * 180 / Math.PI
+    }
 
-var GetSlideAngle = function(dx, dy) {
-    return Math.atan2(dy, dx) * 180 / Math.PI
-}
-
-var GetSlideDirection = function(startX, startY, endX, endY) {
-    var dy = startY - endY
-    var dx = endX - startX
-    var result = ''
-    //如果滑动距离太短
-    if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+    this.setStartCoord = function(evt) {
+        startX = evt.touches[0].pageX
+        startY = evt.touches[0].pageY
+    }
+    this.setEndCoord = function(evt) {
+        endX = evt.changedTouches[0].pageX
+        endY = evt.changedTouches[0].pageY
+    }
+    this.GetSlideDirection = function() {
+        var dy = startY - endY
+        var dx = endX - startX
+        var result = ''
+        //如果滑动距离太短
+        if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+            return result
+        }
+        // 判断方向
+        var angle = GetSlideAngle(dx, dy)
+        if (angle >= -45 && angle < 45) {
+            result = 'right'
+        } else if (angle >= 45 && angle < 135) {
+            result = 'top'
+        } else if (angle >= -135 && angle < -45) {
+            result = 'bottom'
+        } else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
+            result = 'left'
+        }
         return result
     }
-    // 判断方向
-    var angle = GetSlideAngle(dx, dy)
-    if (angle >= -45 && angle < 45) {
-        result = 'right'
-    } else if (angle >= 45 && angle < 135) {
-        result = 'top'
-    } else if (angle >= -135 && angle < -45) {
-        result = 'bottom'
-    } else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
-        result = 'left'
-    }
-    return result
 }
-
 
 // 滑动事件
 var clearZero = function(arr) {
@@ -317,27 +327,25 @@ var updateStatus = function() {
 }
 
 // 根据滑动方向进行滑动
-var _direction = ''
+var slide = new SlideObj()
 var bindSlide = function() {
     document.addEventListener('touchstart', function (ev) {
-        _startX = ev.touches[0].pageX
-        _startY = ev.touches[0].pageY
+        slide.setStartCoord(ev)
     }, false)
     document.addEventListener('touchend', function (ev) {
-        var endX = ev.changedTouches[0].pageX
-        var endY =  ev.changedTouches[0].pageY
+        slide.setEndCoord(ev)
+        var direction = slide.GetSlideDirection()
         var main = e('.main')
         var sliding = main.dataset.sliding
-        _direction = GetSlideDirection(_startX, _startY, endX, endY)
-        if (_direction === '' || sliding === 'true') {
+        if (direction === '' || sliding === 'true') {
             return
         } else {
-            if (_direction === 'left' || _direction === 'right') {
-                horizonSlide(_direction)
-            } else if (_direction === 'top' || _direction === 'bottom') {
-                verticalSlide(_direction)
+            if (direction === 'left' || direction === 'right') {
+                horizonSlide(direction)
+            } else if (direction === 'top' || direction === 'bottom') {
+                verticalSlide(direction)
             }
-            move(_direction)
+            move(direction)
             randomNum()
             updateStatus()
             setTimeout(function(){
