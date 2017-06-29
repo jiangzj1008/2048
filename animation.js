@@ -57,7 +57,7 @@ var moveRow = function(row, dir) {
 
         if (dir === 'left' || dir === 'right') {
             x = step * count
-        }else if (dir === 'top' || dir === 'bottom') {
+        } else if (dir === 'top' || dir === 'bottom') {
             y = step * count
         }
         r.style.transform = `translate3d(${x}rem, ${y}rem, 0)`
@@ -75,6 +75,3 @@ var move = function(direction) {
     var groups = makeGroup(direction)
     moveGroup(groups, direction)
 }
-
-// 生成新的数字
-// var

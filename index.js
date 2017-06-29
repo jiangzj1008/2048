@@ -221,7 +221,7 @@ var verticalSlide = function(direction) {
     _arr = rotateArrRight(_arr)
 }
 
-var generateNum = function(i, j, num) {
+var templateNum = function(i, j, num) {
     var top = (0.1 * (1 + 16 * i)).toFixed(1)
     var left = (0.1 * (1 + 16 * j)).toFixed(1)
     var style = `
@@ -231,44 +231,38 @@ var generateNum = function(i, j, num) {
     var template = `
         <div class="num num-${num}" style="${style}">${num}</div>
     `
-    var board = e('.board')
-    board.innerHTML += template
-}
-
-var clearBoard = function() {
-    var board = e('.board')
-    board.innerHTML = ''
+    return template
 }
 
 var showArr = function() {
-    var n = 0
-    clearBoard()
+    var temp = ''
     for (var i = 0; i < _arr.length; i++) {
         var a = _arr[i]
         for (var j = 0; j < a.length; j++) {
-            generateNum(i, j, a[j])
-            n++
+            var template = templateNum(i, j, a[j])
+            temp += template
         }
     }
+    var board = e('.board')
+    board.innerHTML = temp
 }
 
 // 提示框
 var showTips = function(text) {
     var tips = e('.tips')
     var box = e('.tips-box')
-
     box.innerHTML = `
         <h3>YOU ${text}!</h3>
         <p>SCORE:${_score}</p>
     `
-    tips.style = 'display:block;'
+    tips.style.display = 'block'
 }
 var bindCloseTips = function() {
     var tips = e('.tips')
     tips.addEventListener('click', function(evt){
         var target = evt.target
         if (!target.classList.contains('tips-box')) {
-            tips.style = ''
+            tips.style.display = 'none'
         }
     })
 }
