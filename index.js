@@ -222,11 +222,11 @@ var verticalSlide = function(direction) {
 }
 
 var generateNum = function(i, j, num) {
-    var top = 0.1 * (1 + 16 * i) + 'rem'
-    var left = 0.1 * (1 + 16 * j) + 'rem'
+    var top = (0.1 * (1 + 16 * i)).toFixed(1)
+    var left = (0.1 * (1 + 16 * j)).toFixed(1)
     var style = `
-        top:${top};
-        left:${left};
+        top:${top}rem;
+        left:${left}rem;
     `
     var template = `
         <div class="num num-${num}" style="${style}">${num}</div>
