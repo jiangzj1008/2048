@@ -380,10 +380,15 @@ var prevent = function() {
     })
 }
 
-initScreen()
-randomNum()
-showArr()
-bindSlide()
-bindReset()
-bindCloseTips()
-prevent()
+var __init = function(){
+    initScreen()
+    randomNum()
+    showArr()
+    bindSlide()
+    bindReset()
+    bindCloseTips()
+    prevent()
+}
+
+__init()
+
