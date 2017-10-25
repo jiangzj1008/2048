@@ -4,4 +4,4 @@
 - 使用原生Javascript实现游戏功能
 - 使用css3实现动画效果
 
-![png](screenshot/01.png)
+![png](Screenshot.png)
